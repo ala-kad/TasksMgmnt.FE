@@ -1,0 +1,68 @@
+<div class="card">
+    <p-table [value]="tasks" [tableStyle]="{ 'min-width': '50rem' }" showGridlines strippedRows
+        [globalFilterFields]="['completed']" editMode="row">
+        <!-- Table Header -->
+        <ng-template #header>
+            <tr>
+                <th style="width:20%">Id</th>
+                <th style="width:20%">Name</th>
+                <th style="width:20%" pSortableColumn>
+                    Creation Date <p-sortIcon field="creationDate" />
+                </th>
+                <th style="width:20%">
+                    Status
+                    <p-columnFilter type="boolean" field="completed"></p-columnFilter>
+                </th>
+                <th style="width:20%">Actions</th>
+            </tr>
+
+        </ng-template>
+        <!-- Table Body -->
+        <ng-template #body let-task let-editing="editing" let-ri="rowIndex">
+            <tr [pEditableRow]="task">
+                <td>{{ task.id }}</td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template #input>
+                            <input pInputText type="text" [(ngModel)]="task.name" />
+                        </ng-template>
+                        <ng-template #output>
+                            {{ task.name }}
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+                <td>{{ task.creationDate | date: 'd MMMM yyyy, on HH:mm:ss' }} </td>
+                <td>
+                    <p-cellEditor>
+                        <ng-template #input>
+                            <p-select [options]="statuses" appendTo="body" [(ngModel)]="task.completed"
+                                [style]="{'width':'100%'}" />
+                        </ng-template>
+                        <ng-template #output>
+                            <p-tag [value]="task.completed ? 'Completed' : 'Incompleted'"
+                                [severity]="getSeverity(task.completed)" />
+                        </ng-template>
+                    </p-cellEditor>
+                </td>
+
+                <td>
+                    <div class="flex items-center justify-center gap-2">
+                        <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
+                            (click)="onRowEditInit(task)" text rounded severity="secondary"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pSaveEditableRow icon="pi pi-check"
+                            (click)="onRowEditSave(task)" text rounded severity="secondary"></button>
+                        <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
+                            (click)="onRowEditCancel(task, ri)" text rounded severity="secondary"></button>
+                       
+                        <app-task-dialog></app-task-dialog>
+                        <app-task-create-dialog></app-task-create-dialog>
+                    </div>
+
+
+                </td>
+
+
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
