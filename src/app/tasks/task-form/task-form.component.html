@@ -1,0 +1,29 @@
+<div class="card flex justify-center">
+    <p-toast />
+    <button (click)="showDialog()" pButton pRipple type="button" icon="pi pi-plus-circle" rounded
+        severity="success"></button>
+
+    <p-dialog header="Create Task" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+            <div class="flex items-center gap-4 mb-4">
+                    <label for="name" class="font-semibold w-24">Task name</label>
+
+                    <input type="text" pInputText class="form-control ng-invalid ng-dirty flex-auto" id="name"
+                        formControlName="name" required pSize="large" autocomplete="off" />
+                
+            </div>
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                <div *ngIf="name.hasError('required')" class="alert alert-danger">
+                    Name is required.
+                </div>
+            </div>
+            <div class="flex justify-end gap-2">
+                <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+                <!-- <p-button label="Save" (click)="visible = false" /> -->
+                <p-button type="submit" label="Save" [disabled]="!taskForm.valid" [outlined]="true" />
+            </div>
+        </form>
+    </p-dialog>
+
+</div>
