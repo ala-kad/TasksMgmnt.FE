@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { MessageService, SelectItem } from 'primeng/api';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { MessageService, SelectItem, ConfirmationService} from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
-
+import { HttpClient  } from '@angular/common/http';
 // PrimeNg Modules
 import { TableModule } from 'primeng/table';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -12,18 +12,14 @@ import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+// Components
+import { TaskFormComponent } from '../task-form/task-form.component';
+import { DeleteDialogContainerComponent } from '../delete-dialog-container/delete-dialog-container.component';
 
-import { TaskDialogComponent } from '../task-delete-dialog/task-delete-dialog.component';
+import { Task } from '../Task';
+import { TaskService } from '../task.service';
 
-import { TaskCreateDialogComponent } from '../task-create-dialog/task-create-dialog.component'
-
-
-interface Task {
-  id: number,
-  name: string,
-  completed: boolean,
-  creationDate: Date
-}
 
 @Component({
   selector: 'app-task-list',
@@ -40,10 +36,10 @@ interface Task {
     FormsModule,
     DatePipe,
     CommonModule,
-    TaskDialogComponent,
-    TaskCreateDialogComponent,
+    TaskFormComponent,
+    DeleteDialogContainerComponent
   ],
-  providers: [MessageService],
+  providers: [MessageService, TaskService, DialogService, ConfirmationService, HttpClient],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -51,25 +47,42 @@ export class TaskListComponent implements OnInit{
   tasks!: Task[];
   statuses!: SelectItem[];
   clonedTasks: { [s: string]: Task } = {};
+  id: any;
+  dataLenght!: number;
+  ref: DynamicDialogRef | undefined;
+  @Output() idEvent = new EventEmitter<any>();
 
-  constructor(
+  constructor( 
     private messageService: MessageService,
-  ) {
-    this.tasks = [
-      { id: 1, name: 'Task 1', completed: true, creationDate: new Date() },
-      { id: 2, name: 'Task 2', completed: true, creationDate: new Date() },
-      { id: 3, name: 'Task 3', completed: true, creationDate: new Date() },
-      { id: 4, name: 'Task 4', completed: false, creationDate: new Date() },
-      { id: 5, name: 'Task 5', completed: false, creationDate: new Date() },
-      { id: 6, name: 'Task 6', completed: false, creationDate: new Date() },
-    ];
-  }
+    private taskService: TaskService,
+    public dialogService: DialogService
+  ) {}
 
   ngOnInit() {
     this.statuses = [
       { label: 'Completed', value: true },
       { label: 'Incompleted', value: false }
     ];
+
+    this.taskService.getTasks().subscribe(
+      {
+        next: (data) => {
+          this.tasks = data;
+          this.dataLenght = data.length;
+          this.taskService.getTasks().subscribe(
+            {
+              next: (data) => {
+                this.tasks = data;
+                this.dataLenght = data.length;
+              },
+              error: (error) => {
+                console.log(error);
+              },
+            },
+          );
+        },
+      },
+    )
   }
 
   getSeverity(status: boolean) {
@@ -95,4 +108,12 @@ export class TaskListComponent implements OnInit{
     delete this.clonedTasks[task.id as number];
   }
 
+  sendTaskId(id: any) {
+    this.id = id;
+  }
+
+  emitTaskID(id: any) { 
+    this.idEvent.emit(id);
+  }
+ 
 }

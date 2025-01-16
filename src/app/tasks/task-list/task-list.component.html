@@ -1,6 +1,12 @@
 <div class="card">
-    <p-table [value]="tasks" [tableStyle]="{ 'min-width': '50rem' }" showGridlines strippedRows
-        [globalFilterFields]="['completed']" editMode="row">
+    <p-table 
+        [value]="tasks" 
+        [tableStyle]="{ 'min-width': '50rem' }" 
+        showGridlines 
+        [globalFilterFields]="['completed']" 
+        editMode="row"
+        
+        >
         <!-- Table Header -->
         <ng-template #header>
             <tr>
@@ -14,6 +20,9 @@
                     <p-columnFilter type="boolean" field="completed"></p-columnFilter>
                 </th>
                 <th style="width:20%">Actions</th>
+                <th>
+                    <app-task-form></app-task-form>
+                </th>
             </tr>
 
         </ng-template>
@@ -44,7 +53,6 @@
                         </ng-template>
                     </p-cellEditor>
                 </td>
-
                 <td>
                     <div class="flex items-center justify-center gap-2">
                         <button *ngIf="!editing" pButton pRipple type="button" pInitEditableRow icon="pi pi-pencil"
@@ -53,15 +61,11 @@
                             (click)="onRowEditSave(task)" text rounded severity="secondary"></button>
                         <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
                             (click)="onRowEditCancel(task, ri)" text rounded severity="secondary"></button>
-                       
-                        <app-task-dialog></app-task-dialog>
-                        <app-task-create-dialog></app-task-create-dialog>
                     </div>
-
-
+                    <div class="align-items">
+                        <app-delete-dialog-container [id]="sendTaskId(task.id)" [taskId]="emitTaskID(task.id)"></app-delete-dialog-container>
+                    </div>
                 </td>
-
-
             </tr>
         </ng-template>
     </p-table>
