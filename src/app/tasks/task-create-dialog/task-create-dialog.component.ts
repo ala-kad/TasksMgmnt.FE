@@ -27,28 +27,19 @@ export class TaskCreateDialogComponent implements OnDestroy {
     public dialogService: DialogService,
   ) {}
  
-
-
-  openDialog() {
-    this.dialogService.open(TaskFormComponent, {
-      header: 'Create Task', 
-      width: '400px', 
-    });
-  }
-
   show() {
     this.ref = this.dialogService.open(TaskFormComponent, {
-        header: 'Create a  newTask',
-        width: '50vw',
-        closable: true,
-        closeOnEscape: true,
-        modal:true,
-        contentStyle: { overflow: 'auto' },
-        breakpoints: {
-            '960px': '75vw',
-            '640px': '90vw'
-        },
-        
+      header: 'Create a new Task',
+      width: '50vw',
+      height: '50vh',
+      closable: true,
+      closeOnEscape: true,
+      // modal:true,
+      // contentStyle: { overflow: 'auto' },
+      breakpoints: {
+        '960px': '75vw',
+        '640px': '90vw'
+      },
     })
   }
 
@@ -56,31 +47,5 @@ export class TaskCreateDialogComponent implements OnDestroy {
     if (this.ref) {
       this.ref.close();
     }
-  }
-
-  confirm(event: Event) {
-    this.confirmationService.confirm({
-      target: event.target as EventTarget,
-      message: 'Do you want to create this task?',
-      header: 'Create task',
-      icon: 'pi pi-info-circle',
-      rejectLabel: 'Cancel',
-      rejectButtonProps: {
-        label: 'Cancel',
-        severity: 'danger',
-        outlined: true,
-      },
-      acceptButtonProps: {
-        label: 'Create',
-        severity: 'success',
-      },
-
-      accept: () => {
-        this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'Task created' });
-      },
-      reject: () => {
-        this.messageService.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected' });
-      },
-    });
   }
 }
