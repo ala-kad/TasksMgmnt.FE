@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TasksRoutingModule } from './tasks-routing.module';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 @NgModule({
   declarations: [ ],
@@ -9,7 +10,9 @@ import { TasksRoutingModule } from './tasks-routing.module';
     CommonModule,
     DatePipe,
   ],
-  providers: [],
+  providers: [provideHttpClient(
+    withFetch(),
+  ),],
   exports: []
 })
 export class TasksModule { }
