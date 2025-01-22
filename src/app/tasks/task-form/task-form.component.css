@@ -1,0 +1,24 @@
+.form-controls-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 20px;
+}
+
+.form-controls-container input {
+    width: 100%;
+}
+
+form .error-text {
+    color: red;
+    font-size: 0.8rem;
+    margin-bottom: 0.2rem;
+}
+
+.form-btn-container {
+    display: flex;
+    justify-content: end;
+    gap: 1rem;
+}
