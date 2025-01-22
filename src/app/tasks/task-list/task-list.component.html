@@ -61,9 +61,9 @@
                         <button *ngIf="editing" pButton pRipple type="button" pCancelEditableRow icon="pi pi-times"
                             (click)="onRowEditCancel(task, ri)" text rounded severity="secondary"></button>
                     </div>
-                    <div class="align-items">
-                        <app-delete-dialog-container [id]="sendTaskId(task.id)" [taskId]="emitTaskID(task.id)"></app-delete-dialog-container>
-                    </div>
+                </td>
+                <td>
+                    <app-task-delete-dialog [taskId]="task.id"></app-task-delete-dialog>
                 </td>
             </tr>
         </ng-template>

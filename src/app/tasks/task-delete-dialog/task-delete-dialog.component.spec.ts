@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TaskDialogComponent } from './task-delete-dialog-dialog.component';
+import { TaskDialogComponent } from './task-delete-dialog.component';
 
 describe('TaskDialogComponent', () => {
   let component: TaskDialogComponent;

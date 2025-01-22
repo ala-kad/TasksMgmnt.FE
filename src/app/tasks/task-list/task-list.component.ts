@@ -1,5 +1,4 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { MessageService, SelectItem, ConfirmationService} from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClient  } from '@angular/common/http';
@@ -12,12 +11,16 @@ import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
+import { MessageService, SelectItem, ConfirmationService} from 'primeng/api';
 // Components
 import { TaskFormComponent } from '../task-form/task-form.component';
-import { DeleteDialogContainerComponent } from '../delete-dialog-container/delete-dialog-container.component';
-
-import { Task } from '../Task';
+import { TaskDeleteDialogComponent } from '../task-delete-dialog/task-delete-dialog.component';
+// Services
 import { TaskService } from '../task.service';
+// Models
+import { Task } from '../Task';
+
 
 
 @Component({
@@ -36,9 +39,15 @@ import { TaskService } from '../task.service';
     DatePipe,
     CommonModule,
     TaskFormComponent,
-    DeleteDialogContainerComponent
+    TaskDeleteDialogComponent,
   ],
-  providers: [MessageService, TaskService, ConfirmationService, HttpClient],
+  providers: [
+    MessageService, 
+    TaskService, 
+    ConfirmationService, 
+    HttpClient,
+    DialogService,
+  ],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -48,10 +57,14 @@ export class TaskListComponent implements OnInit{
   clonedTasks: { [s: string]: Task } = {};
   id: any;
   @Output() idEvent = new EventEmitter<any>();
+  ref: DynamicDialogRef | undefined;
+
+
 
   constructor( 
     private messageService: MessageService,
     private taskService: TaskService,
+    private dialogService: DialogService,
   ) {}
 
   ngOnInit() {
@@ -102,6 +115,14 @@ export class TaskListComponent implements OnInit{
         },
       },
     )
+  }
+
+  openDeleteDialog(id: number) {
+    this.ref = this.dialogService.open(TaskDeleteDialogComponent, {
+      data: {
+        id: id,
+      },
+    })
   }
 
 }

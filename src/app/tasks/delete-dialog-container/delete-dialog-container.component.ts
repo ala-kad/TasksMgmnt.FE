@@ -5,7 +5,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog'
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 // Components Imports
-import { TaskDialogComponent } from '../task-delete-dialog/task-delete-dialog-dialog.component';
+import { TaskDialogComponent } from '../task-delete-dialog/task-delete-dialog.component';
 
 @Component({
   selector: 'app-delete-dialog-container',

@@ -1,8 +1,6 @@
-
 <p-toast />
-<p-confirmdialog (click)="confirm($event)"/>
-<!-- <button 
-    (click)="confirm($event)"
+<p-confirmdialog/>
+<p-button   
     pButton
     pRipple
     type="button"
@@ -10,4 +8,5 @@
     severity="danger" 
     [outlined]="true" 
     rounded
-></button> -->
+    (click)="visible == true; confirm($event)" 
+/>
