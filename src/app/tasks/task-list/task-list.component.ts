@@ -12,7 +12,6 @@ import { ToastModule } from 'primeng/toast';
 import { SelectModule } from 'primeng/select';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 // Components
 import { TaskFormComponent } from '../task-form/task-form.component';
 import { DeleteDialogContainerComponent } from '../delete-dialog-container/delete-dialog-container.component';
@@ -39,7 +38,7 @@ import { TaskService } from '../task.service';
     TaskFormComponent,
     DeleteDialogContainerComponent
   ],
-  providers: [MessageService, TaskService, DialogService, ConfirmationService, HttpClient],
+  providers: [MessageService, TaskService, ConfirmationService, HttpClient],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.css'
 })
@@ -48,14 +47,11 @@ export class TaskListComponent implements OnInit{
   statuses!: SelectItem[];
   clonedTasks: { [s: string]: Task } = {};
   id: any;
-  dataLenght!: number;
-  ref: DynamicDialogRef | undefined;
   @Output() idEvent = new EventEmitter<any>();
 
   constructor( 
     private messageService: MessageService,
     private taskService: TaskService,
-    public dialogService: DialogService
   ) {}
 
   ngOnInit() {
@@ -64,25 +60,7 @@ export class TaskListComponent implements OnInit{
       { label: 'Incompleted', value: false }
     ];
 
-    this.taskService.getTasks().subscribe(
-      {
-        next: (data) => {
-          this.tasks = data;
-          this.dataLenght = data.length;
-          this.taskService.getTasks().subscribe(
-            {
-              next: (data) => {
-                this.tasks = data;
-                this.dataLenght = data.length;
-              },
-              error: (error) => {
-                console.log(error);
-              },
-            },
-          );
-        },
-      },
-    )
+    this.getAllTasks();
   }
 
   getSeverity(status: boolean) {
@@ -115,5 +93,15 @@ export class TaskListComponent implements OnInit{
   emitTaskID(id: any) { 
     this.idEvent.emit(id);
   }
- 
+  
+  getAllTasks() { 
+    this.taskService.getTasks().subscribe(
+      {
+        next: (data) => {
+          this.tasks = data;
+        },
+      },
+    )
+  }
+
 }
